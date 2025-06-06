@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AuthModule } from './auth.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
+import { Logger } from 'winston';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 async function bootstrap() {
     const app = await NestFactory.create(AuthModule);
@@ -19,6 +21,10 @@ async function bootstrap() {
             },
         });
 
+    const logger: Logger = microservice.get(WINSTON_MODULE_NEST_PROVIDER);
+    microservice.useLogger(logger);
+
     await microservice.listen();
 }
+
 bootstrap();
