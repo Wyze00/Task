@@ -9,6 +9,7 @@ import { ValidationService } from './validation.service';
         WinstonModule.forRoot({
             format: winston.format.json(),
             transports: [new winston.transports.Console()],
+            level: 'debug',
         }),
     ],
     providers: [ValidationService],
