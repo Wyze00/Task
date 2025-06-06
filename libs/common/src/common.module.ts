@@ -1,7 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
-import winston from 'winston';
-import { ConfigModule } from '@nestjs/config';
+import * as winston from 'winston';
 import { ValidationService } from './validation.service';
 
 @Global()
@@ -10,9 +9,6 @@ import { ValidationService } from './validation.service';
         WinstonModule.forRoot({
             format: winston.format.json(),
             transports: [new winston.transports.Console()],
-        }),
-        ConfigModule.forRoot({
-            isGlobal: true,
         }),
     ],
     providers: [ValidationService],
