@@ -3,8 +3,8 @@ import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
 
 @Module({
-  imports: [],
-  controllers: [GatewayController],
-  providers: [GatewayService],
+    imports: [],
+    controllers: [GatewayController],
+    providers: [GatewayService],
 })
 export class GatewayModule {}
