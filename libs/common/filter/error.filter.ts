@@ -7,7 +7,7 @@ import {
 import { ZodError } from 'zod';
 import { Response } from 'express';
 
-@Catch(HttpException, ZodError)
+@Catch(HttpException, ZodError, Error)
 export class ErrorFilter implements ExceptionFilter {
     catch(exception: Error, host: ArgumentsHost) {
         const response: Response = host.switchToHttp().getResponse();

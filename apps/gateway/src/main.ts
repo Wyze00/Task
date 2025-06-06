@@ -3,6 +3,7 @@ import { GatewayModule } from './gateway.module';
 import { Logger } from 'winston';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { ConfigService } from '@nestjs/config';
+import { ErrorFilter } from 'libs/common/filter/error.filter';
 
 async function bootstrap() {
     const app = await NestFactory.create(GatewayModule);
@@ -13,6 +14,8 @@ async function bootstrap() {
     const port: number | undefined = app
         .get(ConfigService)
         .get<number | undefined>('PORT');
+
+    app.useGlobalFilters(new ErrorFilter());
 
     await app.listen(port || 3000);
 }
