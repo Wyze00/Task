@@ -12,7 +12,7 @@ async function bootstrap() {
     const logger: Logger = app.get<any, Logger>(WINSTON_MODULE_NEST_PROVIDER);
     app.useLogger(logger);
 
-    const port: number | undefined =
+    const port: number =
         app.get(ConfigService).get<number | undefined>('PORT') || 3000;
 
     app.useGlobalFilters(new ErrorFilter());
