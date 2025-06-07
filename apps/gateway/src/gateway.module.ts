@@ -3,6 +3,7 @@ import { CommonModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from 'libs/common/middleware/logger.middleware';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -12,6 +13,7 @@ import { UserModule } from './user/user.module';
             envFilePath: 'apps/gateway/.env',
         }),
         UserModule,
+        AuthModule,
     ],
 })
 export class GatewayModule implements NestModule {
