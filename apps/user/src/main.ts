@@ -16,14 +16,15 @@ async function bootstrap() {
         await NestFactory.createMicroservice<MicroserviceOptions>(UserModule, {
             transport: Transport.TCP,
             options: {
-                host,
-                port,
+                host: host,
+                port: port,
             },
         });
 
     const logger: Logger = microservices.get(WINSTON_MODULE_NEST_PROVIDER);
     microservices.useLogger(logger);
 
+    logger.debug(`User start at : ${port} ${host}`);
     await microservices.listen();
 }
 bootstrap();

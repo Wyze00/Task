@@ -1,7 +1,7 @@
 import { CreateUserRequestDto, UserResponseDto } from '@app/contract';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -9,7 +9,11 @@ export class UserService {
         @Inject('USER_CLIENT') private readonly userClient: ClientProxy,
     ) {}
 
-    create(request: CreateUserRequestDto): Observable<UserResponseDto> {
-        return this.userClient.send<UserResponseDto>('users.create', request);
+    async create(request: CreateUserRequestDto): Promise<UserResponseDto> {
+        const resp = await lastValueFrom<UserResponseDto>(
+            this.userClient.send('user.create', request),
+        );
+
+        return resp;
     }
 }

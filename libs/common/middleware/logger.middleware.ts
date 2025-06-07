@@ -8,7 +8,7 @@ export class LoggerMiddleware implements NestMiddleware {
     constructor(@Inject(WINSTON_MODULE_PROVIDER) private logger: Logger) {}
 
     use(req: Request, res: Response, next: (error?: any) => void) {
-        this.logger.debug(`[Request] : ${req.path}`);
+        this.logger.debug(`[Request] : ${JSON.stringify(req.body)}`);
         next();
     }
 }

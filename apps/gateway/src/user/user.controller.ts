@@ -5,7 +5,6 @@ import {
 } from '@app/contract';
 import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Observable } from 'rxjs';
 
 @Controller('user')
 export class UserController {
@@ -24,10 +23,10 @@ export class UserController {
 
     @Post()
     @HttpCode(200)
-    createUser(
+    async createUser(
         @Body() request: CreateUserRequestDto,
-    ): WebResponse<Observable<UserResponseDto>> {
-        const response = this.userService.create(request);
+    ): Promise<WebResponse<UserResponseDto>> {
+        const response = await this.userService.create(request);
 
         return {
             data: response,
