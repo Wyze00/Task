@@ -2,7 +2,6 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { CommonModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from 'libs/common/middleware/logger.middleware';
-import { GatewayController } from './gateway.controller';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -14,7 +13,6 @@ import { UserModule } from './user/user.module';
         }),
         UserModule,
     ],
-    controllers: [GatewayController],
 })
 export class GatewayModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {

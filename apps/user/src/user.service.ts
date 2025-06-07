@@ -4,7 +4,7 @@ import { CreateUserRequestDto, UserResponseDto } from '@app/contract';
 import { User } from '@prisma/user-client';
 import { UserValidation } from './user.validation';
 import { ValidationService } from '@app/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -23,6 +23,16 @@ export class UserService {
             UserValidation.CREATE,
             userCreateRequest,
         );
+
+        const count: number = await this.prismaService.user.count({
+            where: {
+                username: request.username,
+            },
+        });
+
+        if (count) {
+            throw new RpcException('User already exists');
+        }
 
         const user: User = await this.prismaService.user.create({
             data: {

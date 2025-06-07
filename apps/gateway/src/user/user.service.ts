@@ -1,5 +1,5 @@
 import { CreateUserRequestDto, UserResponseDto } from '@app/contract';
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 
@@ -10,10 +10,14 @@ export class UserService {
     ) {}
 
     async create(request: CreateUserRequestDto): Promise<UserResponseDto> {
-        const resp = await lastValueFrom<UserResponseDto>(
-            this.userClient.send('user.create', request),
-        );
+        try {
+            const resp = await lastValueFrom<UserResponseDto>(
+                this.userClient.send('user.create', request),
+            );
 
-        return resp;
+            return resp;
+        } catch (e: any) {
+            throw new HttpException(e, 400);
+        }
     }
 }
