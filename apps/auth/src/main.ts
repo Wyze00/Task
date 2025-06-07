@@ -19,7 +19,7 @@ async function bootstrap() {
         transport: Transport.RMQ,
         options: {
             urls: [rmq],
-            queue: 'Create User',
+            queue: 'user_event',
             queueOptions: {
                 durable: true,
             },

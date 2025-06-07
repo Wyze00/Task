@@ -24,11 +24,12 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
                             config.get<string>('RABBITMQ_URL') ||
                                 'amqp://localhost:5672/task',
                         ],
-                        queue: 'Create User',
+                        queue: 'user_event',
                         queueOptions: {
                             durable: true,
                         },
                         exchange: 'user',
+                        exchangeType: 'direct',
                     },
                 }),
                 inject: [ConfigService],
