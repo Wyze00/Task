@@ -3,9 +3,18 @@ import {
     UserResponseDto,
     WebResponse,
 } from '@app/contract';
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    Post,
+    UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'libs/common/guard/auth.guard';
+import { Username } from 'libs/common/decorator/username.decorator';
 
 @ApiTags('User API')
 @Controller('user')
@@ -13,11 +22,12 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Get()
+    @UseGuards(AuthGuard)
     @HttpCode(200)
-    getUser(): WebResponse<UserResponseDto> {
+    getUser(@Username() username: string): WebResponse<UserResponseDto> {
         return {
             data: {
-                username: 'test',
+                username: username,
                 name: 'mock',
             },
         };
