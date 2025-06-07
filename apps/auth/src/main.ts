@@ -9,8 +9,8 @@ async function bootstrap() {
     const app = await NestFactory.create(AuthModule);
     const configService: ConfigService = await app.get(ConfigService);
 
-    const port = configService.get<number>('PORT') || 3001;
-    const host = configService.get<string>('HOST') || 'localhost';
+    const port: number = configService.get<number>('PORT') || 3001;
+    const host: string = configService.get<string>('HOST') || 'localhost';
 
     const microservice =
         await NestFactory.createMicroservice<MicroserviceOptions>(AuthModule, {
