@@ -1,4 +1,4 @@
-export class UserResponse {
+export class UserResponseDto {
     username: string;
     name: string;
 }

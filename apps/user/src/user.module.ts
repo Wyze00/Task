@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { ConfigModule } from '@nestjs/config';
 import { CommonModule } from '@app/common';
 import { PrismaService } from './prisma.service';
+// import { UserValidation } from './user.validation';
 
 @Module({
     imports: [
