@@ -5,7 +5,9 @@ import {
 } from '@app/contract';
 import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { UserService } from './user.service';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User API')
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {}
@@ -21,8 +23,13 @@ export class UserController {
         };
     }
 
+    @ApiOperation({ summary: 'Create new user' })
+    @ApiCreatedResponse({
+        description: 'User successfuly created',
+        type: UserResponseDto,
+    })
     @Post()
-    @HttpCode(200)
+    @HttpCode(201)
     async createUser(
         @Body() request: CreateUserRequestDto,
     ): Promise<WebResponse<UserResponseDto>> {
