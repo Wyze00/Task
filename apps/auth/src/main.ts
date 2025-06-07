@@ -7,24 +7,42 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 async function bootstrap() {
     const app = await NestFactory.create(AuthModule);
-    const configService: ConfigService = await app.get(ConfigService);
+    const configService: ConfigService = app.get(ConfigService);
 
-    const port: number = configService.get<number>('PORT') || 3001;
-    const host: string = configService.get<string>('HOST') || 'localhost';
+    const port = configService.get<number>('PORT') || 3001;
+    const host = configService.get<string>('HOST') || 'localhost';
+    const rmq =
+        configService.get<string>('RABBITMQ_URL') ||
+        'amqp://guest:guest@localhost:5672/task';
 
-    const microservice =
-        await NestFactory.createMicroservice<MicroserviceOptions>(AuthModule, {
-            transport: Transport.TCP,
-            options: {
-                port,
-                host,
+    app.connectMicroservice<MicroserviceOptions>({
+        transport: Transport.RMQ,
+        options: {
+            urls: [rmq],
+            queue: 'Create User',
+            queueOptions: {
+                durable: true,
             },
-        });
+            exchange: 'user',
+            exchangeType: 'direct',
+        },
+    });
 
-    const logger: Logger = microservice.get(WINSTON_MODULE_NEST_PROVIDER);
-    microservice.useLogger(logger);
+    app.connectMicroservice<MicroserviceOptions>({
+        transport: Transport.TCP,
+        options: {
+            port,
+            host,
+        },
+    });
 
-    await microservice.listen();
+    const logger: Logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
+    app.useLogger(logger);
+
+    logger.debug(
+        `Auth Service started at TCP ${host}:${port} and listening for RabbitMQ events`,
+    );
+
+    await app.startAllMicroservices();
 }
-
 bootstrap();
