@@ -1,20 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { CreateUserRequestDto, UserResponseDto } from '@app/contract';
 import { User } from '@prisma/user-client';
 import { UserValidation } from './user.validation';
 import { ValidationService } from '@app/common';
+import { ClientProxy } from '@nestjs/microservices';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
     constructor(
         private readonly prismaService: PrismaService,
         private readonly validationService: ValidationService,
+        @Inject('USER_EVENT_CLIENT')
+        private readonly eventClient: ClientProxy,
     ) {}
-
-    getHello(): string {
-        return 'Hello World!';
-    }
 
     async create(
         userCreateRequest: CreateUserRequestDto,
@@ -27,7 +27,7 @@ export class UserService {
         const user: User = await this.prismaService.user.create({
             data: {
                 name: request.name,
-                password: request.password,
+                password: await bcrypt.hash(request.password, 10),
                 username: request.username,
             },
         });
@@ -36,6 +36,11 @@ export class UserService {
             name: user.name,
             username: user.username,
         };
+
+        this.eventClient.emit('user.create', {
+            username: user.username,
+            password: user.password,
+        });
 
         return response;
     }

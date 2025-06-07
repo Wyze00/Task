@@ -24,7 +24,7 @@ async function bootstrap() {
     const logger: Logger = microservices.get(WINSTON_MODULE_NEST_PROVIDER);
     microservices.useLogger(logger);
 
-    logger.debug(`User start at : ${port} ${host}`);
+    logger.debug(`User Service start at : ${port} ${host}`);
     await microservices.listen();
 }
 bootstrap();
