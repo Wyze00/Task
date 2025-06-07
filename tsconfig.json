@@ -29,6 +29,12 @@
       ],
       "@app/contract/*": [
         "libs/contract/src/*"
+      ],
+      "@prisma/auth-client": [
+        "node_modules/.prisma/auth-client"
+      ],
+      "@prisma/user-client": [
+        "node_modules/.prisma/user-client"
       ]
     }
   }
