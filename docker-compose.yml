@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  user:
+    build:
+      context: .
+      dockerfile: apps/user/Dockerfile
+    env_file:
+      - apps/user/.env.docker
+    ports:
+      - "3002:3002"
+    depends_on:
+      - mysql-user
+      - rabbitmq
+
+  mysql-user:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Wyze
+      MYSQL_DATABASE: task
+    ports:
+      - "3307:3306"
+    volumes:
+      - user-mysql-data:/var/lib/mysql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
