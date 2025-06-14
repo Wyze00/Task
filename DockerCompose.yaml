@@ -5,8 +5,6 @@ services:
       dockerfile: apps/user/Dockerfile
     env_file:
       - apps/user/.env.docker
-    ports:
-      - "3002:3002"
     depends_on:
       - mysql-user
       - rabbitmq
@@ -26,11 +24,18 @@ services:
       dockerfile: apps/auth/Dockerfile
     env_file:
       - apps/auth/.env.docker
-    ports:
-      - "3001:3001"
     depends_on:
       - mysql-auth
       - rabbitmq
+    
+  gateway: 
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile
+    env_file:
+      - apps/gateway/.env.docker
+    ports:
+      - "3000:3000"
 
   mysql-auth:
     image: mysql:8
