@@ -27,8 +27,9 @@ WORKDIR /app
 RUN npm run build user
 
 # Kembali ke direktori service
-# WORKDIR /app/dist/apps/user
 
 EXPOSE 3002
+
+WORKDIR /app/apps/user
 
 CMD npx prisma migrate deploy && cd ../.. && npm run start:prod:user
